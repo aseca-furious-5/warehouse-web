@@ -1,0 +1,1 @@
+export const WAREHOUSE_API_URL = process.env.REACT_APP_WAREHOUSE_API_URL;
