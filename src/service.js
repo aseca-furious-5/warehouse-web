@@ -22,10 +22,11 @@ export const updateItemPreparationStatus = async (itemPreparationId, isReady) =>
     }
 };
 
-export const updateOrderStatus = async (orderId, isReady) => {
+export const updateOrderStatus = async (orderId, newStatus) => {
     try {
         const response = await axios.put(
-            `${WAREHOUSE_API_URL}/preparation/order/${orderId}`
+            `${WAREHOUSE_API_URL}/preparation/${orderId}/status`,
+            { status: newStatus }
         );
         return response.data;
     } catch (error) {
