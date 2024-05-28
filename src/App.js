@@ -1,7 +1,6 @@
 import './App.css';
-import {useEffect, useState} from "react";
-import {getAllOrders, updateItemPreparationStatus, updateOrderStatus} from "./service";
-
+import { useEffect, useState } from "react";
+import { getAllOrders, updateItemPreparationStatus, updateOrderStatus } from "./service";
 
 const OrderItem = ({ item, onPrepare }) => {
     const handlePrepare = () => {
@@ -9,7 +8,7 @@ const OrderItem = ({ item, onPrepare }) => {
     };
 
     return (
-        <div>
+        <div className="order-item">
             <input
                 type="checkbox"
                 checked={item.isReady}
@@ -30,7 +29,7 @@ const Order = ({ order, onPrepareItem, onChangeStatus }) => {
     };
 
     return (
-        <div>
+        <div className="order">
             <h2>Preparation #{order.id}</h2>
             <h3>Order ID: {order.orderId}</h3>
             <div>
@@ -109,10 +108,14 @@ const OrdersPage = () => {
     );
 };
 
-
 function App() {
     return (
-        <OrdersPage/>
+        <div className="App">
+            <header className="App-header">
+                <h1>Warehouse App</h1>
+            </header>
+            <OrdersPage />
+        </div>
     );
 }
 
