@@ -2,7 +2,7 @@ import './App.css';
 import { useEffect, useState } from "react";
 import { getAllOrders, updateItemPreparationStatus, updateOrderStatus } from "./service";
 
-const OrderItem = ({ item, onPrepare }) => {
+const OrderItem = ({ item, onPrepare, isPreparing }) => {
     const handlePrepare = () => {
         onPrepare(item.id);
     };
@@ -13,6 +13,7 @@ const OrderItem = ({ item, onPrepare }) => {
                 type="checkbox"
                 checked={item.isReady}
                 onChange={handlePrepare}
+                disabled={!isPreparing}
             />
             <label>{item.name} --- Quantity: {item.quantity}</label>
         </div>
@@ -38,6 +39,8 @@ const Order = ({ order, onPrepareItem, onChangeStatus }) => {
                 (currentStatusIndex !== 0 || allItemsReady()))) {
             setCurrentStatusIndex(newStatusIndex);
             onChangeStatus(order.id, event.target.value);
+        } else if (newStatusIndex === 1 && !allItemsReady()) {
+            alert("No puedes cambiar a 'Ready to dispatch' hasta que todas las casillas estén marcadas");
         }
     };
 
@@ -51,6 +54,7 @@ const Order = ({ order, onPrepareItem, onChangeStatus }) => {
                         key={item.id}
                         item={item}
                         onPrepare={handlePrepareItem}
+                        isPreparing={currentStatusIndex === 0}
                     />
                 ))}
             </div>
