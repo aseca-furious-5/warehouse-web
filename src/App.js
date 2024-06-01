@@ -20,12 +20,25 @@ const OrderItem = ({ item, onPrepare }) => {
 };
 
 const Order = ({ order, onPrepareItem, onChangeStatus }) => {
+    const statusOptions = ["PREPARING", "READY_TO_DISPATCH", "DISPATCHED"];
+    const [currentStatusIndex, setCurrentStatusIndex] = useState(statusOptions.indexOf(order.status));
+
     const handlePrepareItem = (itemId) => {
         onPrepareItem(order.id, itemId);
     };
 
+    const allItemsReady = () => {
+        return order.items.every(item => item.isReady);
+    };
+
     const handleChangeStatus = (event) => {
-        onChangeStatus(order.id, event.target.value);
+        const newStatusIndex = statusOptions.indexOf(event.target.value);
+        if (newStatusIndex === currentStatusIndex ||
+            (newStatusIndex === currentStatusIndex + 1 &&
+                (currentStatusIndex !== 0 || allItemsReady()))) {
+            setCurrentStatusIndex(newStatusIndex);
+            onChangeStatus(order.id, event.target.value);
+        }
     };
 
     return (
@@ -41,10 +54,12 @@ const Order = ({ order, onPrepareItem, onChangeStatus }) => {
                     />
                 ))}
             </div>
-            <select onChange={handleChangeStatus} value={order.status}>
-                <option value="PREPARING">Preparing</option>
-                <option value="READY_TO_DISPATCH">Ready to dispatch</option>
-                <option value="DISPATCHED">Dispatched</option>
+            <select onChange={handleChangeStatus} value={statusOptions[currentStatusIndex]}>
+                {statusOptions.map((status, index) => (
+                    <option key={status} value={status} disabled={index > currentStatusIndex + 1}>
+                        {status}
+                    </option>
+                ))}
             </select>
         </div>
     );
